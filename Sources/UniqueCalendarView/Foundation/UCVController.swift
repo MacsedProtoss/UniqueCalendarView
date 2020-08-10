@@ -13,6 +13,7 @@ internal class UCVController : UIViewController,UITableViewDelegate,UITableViewD
     
     private var type : UCVCalendarType = .single
     private var config : UCVConfig!
+    var cache : UCVCache!
     var delegate : UCVDelegate?
     
     private var mainView : UCVView!
@@ -81,16 +82,18 @@ internal class UCVController : UIViewController,UITableViewDelegate,UITableViewD
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if UCVCacheBuilder.CalendarCache.data.count != 0{
-            let data = UCVCacheBuilder.CalendarCache.data[indexPath.row]
+        if self.cache.data.count != 0{
+            let data = self.cache.data[indexPath.row]
             let cell = UCVMonthCell(year: data.year, month: data.month, config: self.config)
             cell.calendar.delegate = self
+            cell.cache = self.cache
             return cell
         }else{
             let month = (UCVCalendarUtil.shared.getStartMonth() + indexPath.row)%12==0 ? 12 : (UCVCalendarUtil.shared.getStartMonth() + indexPath.row)%12
             
             let cell = UCVMonthCell(year: UCVCalendarUtil.shared.getStartYear() + (indexPath.row+1)/12, month: month, config: self.config)
             cell.calendar.delegate = self
+            cell.cache = self.cache
             return cell
         }
         
@@ -98,8 +101,8 @@ internal class UCVController : UIViewController,UITableViewDelegate,UITableViewD
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        if UCVCacheBuilder.CalendarCache.data.count != 0{
-            let data = UCVCacheBuilder.CalendarCache.data[indexPath.row]
+        if self.cache.data.count != 0{
+            let data = self.cache.data[indexPath.row]
             return data.height
         }else{
             let month = (UCVCalendarUtil.shared.getStartMonth() + indexPath.row)%12==0 ? 12 : (UCVCalendarUtil.shared.getStartMonth() + indexPath.row)%12

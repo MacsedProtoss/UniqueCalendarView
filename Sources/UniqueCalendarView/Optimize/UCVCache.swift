@@ -38,9 +38,9 @@ internal let UCVDayCellCache = UCVDayCellConstant(base: (380.0/7).reSized, reSiz
 
 internal class UCVCacheBuilder{
     
-    static let lock = NSObject()
+    let lock = NSObject()
     
-    static var CalendarCache : UCVCache{
+    var CalendarCache : UCVCache{
         get{
             objc_sync_enter(lock)
             let output = _CalendarCache
@@ -54,9 +54,9 @@ internal class UCVCacheBuilder{
         }
     }
     
-    private static var _CalendarCache : UCVCache = UCVCache(data: [])
+    private var _CalendarCache : UCVCache = UCVCache(data: [])
     
-    static func GetCache(){
+    func GetCache(completion:((Bool)->Void)?){
         DispatchQueue.global().async {
             var output = UCVCache(data: [])
             
@@ -81,8 +81,10 @@ internal class UCVCacheBuilder{
                 
             }
             
-            CalendarCache = output
-            
+            self.CalendarCache = output
+            if (completion != nil){
+                completion!(true)
+            }
         }
     }
     

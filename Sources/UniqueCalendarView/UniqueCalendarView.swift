@@ -8,39 +8,110 @@
 import Foundation
 import UIKit
 
-///UniqueCalendarView构造器
+///UniqueCalendarView入口
 ///
 ///同时只能最多存在一个UniqueCalendarView
-public class UniqueCalendarViewBuilder{
-    ///使用默认配置生成一个UniqueCalendarView
+public class UCV{
+    ///使用默认配置生成一个UniqueCalendarView Manager
     /// - parameter type:UniqueCalendar模式 支持单选/多选
     /// - parameter delegate:UniqueCalendar回调代理，用于响应相关操作
-    /// - returns:返回一个UIViewController，请手动管理其View位置和reference
-    static func buildController(withType type:UCVCalendarType,withDelegate delegate:UCVDelegate?) -> UIViewController{
-        memoryClean()
-        let controller = UCVController(type: type)
-        controller.delegate = delegate
-        self.controller = controller
-        return controller
+    /// - returns:返回一个UniqueCalendarView Manager
+    static func manager(withType type:UCVCalendarType,withDelegate delegate:UCVDelegate?) -> UniqueCalendarViewManager{
+        return UniqueCalendarViewManager(withType: type, withDelegate: delegate)
     }
-    ///使用自定义配置生成一个UniqueCalendarView
+    ///使用自定义配置生成一个UniqueCalendarView Manager
     /// - parameter type:UniqueCalendar模式 支持单选/多选
     /// - parameter config:UniqueCalendar配置文件，用于配置部分自定义内容
     /// - parameter delegate:UniqueCalendar回调代理，用于响应相关操作
-    /// - returns:返回一个UIViewController，请手动管理其View位置和reference
-    static func buildController(withType type:UCVCalendarType, withConfig config:UCVConfig,withDelegate delegate:UCVDelegate?) -> UIViewController{
-        memoryClean()
+    /// - returns:返回一个UniqueCalendarView Manager
+    static func manager(withType type:UCVCalendarType, withConfig config:UCVConfig,withDelegate delegate:UCVDelegate?) -> UniqueCalendarViewManager{
+        return UniqueCalendarViewManager(withType: type, withConfig: config, withDelegate: delegate)
+    }
+    
+}
+
+public class UniqueCalendarViewManager{
+    
+    private var _controller : UCVController!
+    private var type : UCVCalendarType!
+    private var config : UCVConfig!
+    
+    private var cacheBuilder : UCVCacheBuilder!
+    
+    var delegate : UCVDelegate? {
+        set{
+            
+            if (_controller != nil){
+                _controller.delegate = newValue
+            }
+        }
+        get {
+            return _controller==nil ? nil : _controller.delegate
+        }
+    }
+    
+    
+    func controller(getCompletion:@escaping((UIViewController) -> Void)){
+        DispatchQueue.global().async {
+            if (self._controller != nil){
+                DispatchQueue.main.async {
+                    getCompletion(self._controller)
+                }
+                return
+            }else{
+                self.controller(getCompletion: getCompletion)
+                return
+            }
+        }
+    }
+    
+    internal init(withType type:UCVCalendarType,withDelegate delegate:UCVDelegate?){
+        self.type = type
+        self.delegate = delegate
+        prepareIfNeeded()
+    }
+    
+    internal init(withType type:UCVCalendarType, withConfig config:UCVConfig,withDelegate delegate:UCVDelegate?){
+        self.type = type
+        self.delegate = delegate
+        self.config = config
+        prepareIfNeeded()
+    }
+    
+    private func buildController(withType type:UCVCalendarType,withDelegate delegate:UCVDelegate?) {
+        
+        let controller = UCVController(type: type)
+        controller.delegate = delegate
+        self._controller = controller
+    }
+    
+    private func buildController(withType type:UCVCalendarType, withConfig config:UCVConfig,withDelegate delegate:UCVDelegate?){
+        
         let controller = UCVController(type: type, config: config)
         controller.delegate = delegate
-        self.controller = controller
-        return controller
+        self._controller = controller
     }
-    private static weak var controller : UCVController?
-    private static func memoryClean(){
-        if self.controller != nil {
-            self.controller?.view.removeFromSuperview()
-            self.controller?.removeFromParent()
+    
+    func prepareIfNeeded(){
+        if (self.cacheBuilder == nil){
+            self.cacheBuilder = UCVCacheBuilder()
+            loadCache()
+        }else if (self.cacheBuilder.CalendarCache.data.count == 0){
+            loadCache()
         }
+    }
+    
+    func loadCache(){
+        cacheBuilder.GetCache(completion:{ (finished) in
+            if (finished){
+                if (self.config != nil){
+                    self.buildController(withType: self.type, withConfig: self.config, withDelegate: self.delegate)
+                }else{
+                    self.buildController(withType: self.type, withDelegate: self.delegate)
+                }
+                self._controller.cache = self.cacheBuilder.CalendarCache
+            }
+        })
     }
 }
 

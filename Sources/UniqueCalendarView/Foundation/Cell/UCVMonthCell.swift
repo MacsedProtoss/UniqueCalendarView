@@ -13,6 +13,7 @@ internal class UCVMonthCell : UITableViewCell,UICollectionViewDataSource,UIColle
 
     var year : Int!
     var month : Int!
+    var cache : UCVCache!
     private var config : UCVConfig!
     
     var calendar : UICollectionView!
@@ -83,9 +84,9 @@ internal class UCVMonthCell : UITableViewCell,UICollectionViewDataSource,UIColle
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if UCVCacheBuilder.CalendarCache.data.count != 0{
+        if self.cache.data.count != 0{
             let index = UCVCalendarUtil.shared.getMonthIndex(ofYear: year, ofMonth: month)
-            let data = UCVCacheBuilder.CalendarCache.data[index]
+            let data = self.cache.data[index]
             let firstDay = data.firstDay
             
             if indexPath.row + 2 > firstDay{
