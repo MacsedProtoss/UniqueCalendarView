@@ -13,8 +13,8 @@ internal extension UIImage{
         UIGraphicsBeginImageContext(Size)
         UIGraphicsBeginImageContextWithOptions(Size, false, UIScreen.main.scale)
         self.draw(in: CGRect(x: 0, y: 0, width: Size.width, height: Size.height))
-        let reSizeImage:UIImage? = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+        let reSizeImage:UIImage? = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
         return reSizeImage!
     }
     
