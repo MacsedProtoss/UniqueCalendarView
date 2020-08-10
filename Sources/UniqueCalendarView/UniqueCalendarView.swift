@@ -28,6 +28,9 @@ public class UCV{
         return UniqueCalendarViewManager(withType: type, withConfig: config, withDelegate: delegate)
     }
     
+    public init(){
+        
+    }
 }
 
 ///UniqueCalendarViewManager
@@ -139,15 +142,15 @@ public protocol UCVDelegate {
     ///View消失回调
     ///
     ///主动点击左上角返回按钮退出而非点击确定
-    public func calendarViewDismiss()
+    func calendarViewDismiss()
     ///点击确认回调
     ///
     ///单选模式
-    public func changeDateTo(date : Date)
+    func changeDateTo(date : Date)
     ///点击确认回调
     ///
     ///多选模式
-    public func changeDatesTo(dates : [Date])
+    func changeDatesTo(dates : [Date])
 }
 
 ///UniqueCalendar配置文件
