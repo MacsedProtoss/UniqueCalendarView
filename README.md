@@ -5,6 +5,12 @@ iOS组件补全计划
 ---
 
 iOS Swift 日期选择器 组件
+
+## How to Use
+
+已接入Swift Package Manager，现在你可以使用SPM来管理了
+目前暂时未release，请指定branch - master
+
 ## Progress
 
 - [x] 单选/多选
