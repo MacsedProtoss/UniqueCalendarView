@@ -90,17 +90,19 @@ public class UniqueCalendarViewManager{
     }
     
     private func buildController(withType type:UCVCalendarType,withDelegate delegate:UCVDelegate?) {
-        
-        let controller = UCVController(type: type)
-        controller.delegate = delegate
-        self._controller = controller
+        DispatchQueue.main.async {
+            let controller = UCVController(type: type)
+            controller.delegate = delegate
+            self._controller = controller
+        }
     }
     
     private func buildController(withType type:UCVCalendarType, withConfig config:UCVConfig,withDelegate delegate:UCVDelegate?){
-        
-        let controller = UCVController(type: type, config: config)
-        controller.delegate = delegate
-        self._controller = controller
+        DispatchQueue.main.async {
+            let controller = UCVController(type: type, config: config)
+            controller.delegate = delegate
+            self._controller = controller
+        }
     }
     
     ///强制让Manager检查是否需要建立Cache
