@@ -11,7 +11,7 @@ import UIKit
 ///UniqueCalendarView入口
 ///
 ///通过其方法获取Manager
-public class UCV{
+open class UCV{
     ///使用默认配置生成一个UniqueCalendarView Manager
     /// - parameter type:UniqueCalendar模式 支持单选/多选
     /// - parameter delegate:UniqueCalendar回调代理，用于响应相关操作
@@ -33,7 +33,7 @@ public class UCV{
 ///UniqueCalendarViewManager
 ///
 ///你需要retain这个Manager，如果你不希望在展现完之后就被释放掉的话
-public class UniqueCalendarViewManager{
+open class UniqueCalendarViewManager{
     
     private var _controller : UCVController!
     private var type : UCVCalendarType!
@@ -127,7 +127,7 @@ public class UniqueCalendarViewManager{
 }
 
 ///UniqueCalendar模式
-public enum UCVCalendarType{
+open enum UCVCalendarType{
     ///单选模式
     case single
     ///多选模式
@@ -135,7 +135,7 @@ public enum UCVCalendarType{
 }
 
 ///UniqueCalendar回调代理
-public protocol UCVDelegate {
+open protocol UCVDelegate {
     ///View消失回调
     ///
     ///主动点击左上角返回按钮退出而非点击确定
@@ -153,7 +153,7 @@ public protocol UCVDelegate {
 ///UniqueCalendar配置文件
 ///
 ///暂时只开放颜色和部分文字内容的配置，其他能力，诸如大小等暂时只提供自动自适应
-public struct UCVConfig{
+open struct UCVConfig{
     ///背景颜色
     var backgroundColor : UIColor = UIColor.white
     ///顶部日期字体颜色
