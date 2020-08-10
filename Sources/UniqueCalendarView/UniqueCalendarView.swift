@@ -10,7 +10,7 @@ import UIKit
 
 ///UniqueCalendarView入口
 ///
-///同时只能最多存在一个UniqueCalendarView
+///通过其方法获取Manager
 public class UCV{
     ///使用默认配置生成一个UniqueCalendarView Manager
     /// - parameter type:UniqueCalendar模式 支持单选/多选
@@ -30,6 +30,9 @@ public class UCV{
     
 }
 
+///UniqueCalendarViewManager
+///
+///你需要retain这个Manager，如果你不希望在展现完之后就被释放掉的话
 public class UniqueCalendarViewManager{
     
     private var _controller : UCVController!
@@ -38,6 +41,9 @@ public class UniqueCalendarViewManager{
     
     private var cacheBuilder : UCVCacheBuilder!
     
+    ///UCVDelegate
+    ///
+    ///赋值即指定Calendar回调的代理，也可以通过getter来获得当前代理
     var delegate : UCVDelegate? {
         set{
             
@@ -50,7 +56,9 @@ public class UniqueCalendarViewManager{
         }
     }
     
-    
+    ///获取Manager所管理的Controller
+    ///
+    /// - parameter getCompletion:@escaping((UIViewController) -> Void) ，异步获取VC（为了使用Cache），但是回调中你不需要指定主线程，默认已设置为主线程执行
     func controller(getCompletion:@escaping((UIViewController) -> Void)){
         DispatchQueue.global().async {
             if (self._controller != nil){
@@ -92,6 +100,9 @@ public class UniqueCalendarViewManager{
         self._controller = controller
     }
     
+    ///强制让Manager检查是否需要建立Cache
+    ///
+    ///通常情况下你不需要调用这个方法
     func prepareIfNeeded(){
         if (self.cacheBuilder == nil){
             self.cacheBuilder = UCVCacheBuilder()
@@ -101,7 +112,7 @@ public class UniqueCalendarViewManager{
         }
     }
     
-    func loadCache(){
+    private func loadCache(){
         cacheBuilder.GetCache(completion:{ (finished) in
             if (finished){
                 if (self.config != nil){
