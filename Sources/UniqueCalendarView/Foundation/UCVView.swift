@@ -32,14 +32,13 @@ internal class UCVView: UIView {
         getBasicView()
     }
     
-    convenience init(){
+    convenience init(with config:UCVConfig?){
         self.init()
-        self.config = UCVConfig()
-    }
-    
-    convenience init(with config:UCVConfig){
-        self.init()
-        self.config = config
+        if (config != nil){
+            self.config = config
+        }else{
+            self.config = UCVConfig()
+        }
     }
     
     required init?(coder: NSCoder) {
