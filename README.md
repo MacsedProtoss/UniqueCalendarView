@@ -25,7 +25,7 @@ iOS Swift 日期选择器 组件
 - Swift 5.0+
 
 ## DEMO
-![demo gif](https://macsed.oss-cn-hangzhou.aliyuncs.com/GitHub/UniqueCalendarView/UCVDemo.gif)
+![demo gif](https://github.com/MacsedProtoss/UniqueCalendarView/blob/master/OtherFiles/UCVDemo.gif)
 
 ## License
 
