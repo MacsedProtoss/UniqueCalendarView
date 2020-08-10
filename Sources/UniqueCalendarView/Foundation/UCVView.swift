@@ -29,7 +29,6 @@ internal class UCVView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        getBasicView()
     }
     
     convenience init(with config:UCVConfig?){
@@ -39,6 +38,7 @@ internal class UCVView: UIView {
         }else{
             self.config = UCVConfig()
         }
+        getBasicView()
     }
     
     required init?(coder: NSCoder) {
